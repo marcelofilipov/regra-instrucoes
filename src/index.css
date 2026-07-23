@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/*
+ * Paleta do projeto (Seção 7 do plano) — azul e dourado maçônicos, só cor.
+ * Exposta como tokens de tema do Tailwind v4 (`@theme`) para virar utilitários
+ * como `bg-marinho`, `text-dourado`, etc.
+ */
+@theme {
+  --color-marinho: #1b2a4a; /* Primária */
+  --color-dourado: #c9a227; /* Destaque / Ação */
+  --color-marfim: #f5f3ee; /* Fundo claro */
+  --color-ardosia: #1a1a1a; /* Texto / Modo escuro */
+  --color-pedra: #6b7280; /* Secundário / neutro */
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-marfim);
+  color: var(--color-ardosia);
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}

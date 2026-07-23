@@ -1,0 +1,58 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Papel lido do próprio Firestore (decisão da Seção 4: sem Custom Claims,
+    // pois Cloud Functions exigem plano Blaze). Um get() extra por avaliação —
+    // irrelevante no volume de uma Loja dentro da cota do Spark.
+    function papelDoUsuario() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.papel;
+    }
+    function autenticado() {
+      return request.auth != null;
+    }
+    function ehEditorOuAdmin() {
+      return autenticado() && papelDoUsuario() in ['editor', 'admin'];
+    }
+    function ehAdmin() {
+      return autenticado() && papelDoUsuario() == 'admin';
+    }
+
+    match /instrucoes/{id} {
+      allow read: if autenticado();
+      // Editor cadastra (create), não corrige. Alterar data já gravada = só Admin.
+      allow create: if ehEditorOuAdmin();
+      allow update, delete: if ehAdmin();
+    }
+
+    match /membros/{id} {
+      allow read: if autenticado();
+      allow create, update: if ehEditorOuAdmin();
+      allow delete: if ehAdmin();
+    }
+
+    match /usuarios/{uid} {
+      allow read: if autenticado();
+      // Trava crítica: usuário novo nasce 'leitor' e só pode criar o PRÓPRIO doc.
+      // Ninguém se autopromove; só um Admin sobe o papel depois, via update.
+      allow create: if request.auth.uid == uid
+                    && request.resource.data.papel == 'leitor';
+      allow update: if ehAdmin();
+      allow delete: if ehAdmin();
+    }
+
+    // Trilha de auditoria: append-only. Gravada pelo client no mesmo writeBatch
+    // da alteração (Spark não tem trigger de banco). Alteração só ocorre por Admin.
+    match /auditoria/{logId} {
+      allow read: if autenticado();
+      allow create: if ehAdmin();
+      allow update, delete: if false;
+    }
+
+    // Nega tudo que não foi explicitamente liberado acima.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
