@@ -582,6 +582,13 @@
     protobufjs "^7.2.5"
     yargs "^17.7.2"
 
+"@hookform/resolvers@^5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-5.7.1.tgz#c2c3067066d4ac94411d4583c9522901951a2a12"
+  integrity sha512-8wS/P4UDr5sQDe4nFaV51TVyfDPrWgNIXweqG0Bs9Z5LSuzKLb+RQNPvkN2oHM5SRrJyWrVH/F+LOUcFjUyvwQ==
+  dependencies:
+    "@standard-schema/utils" "^0.3.0"
+
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.13"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz#6342a19f44347518c93e43b1ac69deb3c4656a1f"
@@ -859,6 +866,11 @@
   resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.1.0.tgz#a79b55dbaf8604812f52d140b2c9ab41bc150bb8"
   integrity sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
 
+"@standard-schema/utils@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
+  integrity sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==
+
 "@tailwindcss/node@4.3.3":
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/@tailwindcss/node/-/node-4.3.3.tgz#38ff04309ff036ea3589a7bad9069c44ec9d3883"
@@ -965,6 +977,18 @@
     "@tailwindcss/node" "4.3.3"
     "@tailwindcss/oxide" "4.3.3"
     tailwindcss "4.3.3"
+
+"@tanstack/query-core@5.101.4":
+  version "5.101.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.101.4.tgz#c01b4289b3094144d8ef96235aa506242cf83efa"
+  integrity sha512-gNwcvOJcRbLWPOLG/2OBm+zM+Yv+MKsXKEOWC57USuZDEsI71hEErQsiEGx5wX9rzWWkfwM0fVSPoiIFSsxfiw==
+
+"@tanstack/react-query@^5.101.4":
+  version "5.101.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.101.4.tgz#044137754d79aaa30a82f6e6c42488be79c86ea7"
+  integrity sha512-yRg2pfOCxIs4ZJW3XYYHU/WgtD04FHSnfHlpRT7h7pR77hwkdRG4wxbKe4aq6P0RvXUTBSQpQeadS1SUYUe+KA==
+  dependencies:
+    "@tanstack/query-core" "5.101.4"
 
 "@testing-library/dom@^10.4.1":
   version "10.4.1"
@@ -1797,6 +1821,11 @@ react-dom@^19.2.7:
   dependencies:
     scheduler "^0.27.0"
 
+react-hook-form@^7.85.0:
+  version "7.85.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.85.0.tgz#45b95cc794f9ed752ffc9121cc6ddcc92e97acf0"
+  integrity sha512-U2MTriFXnclmV4rOE20p2DcRFv5WEg3FIcBFOKcOLFHDVvGIMPvLTkTWefUsonmlaVy23khVDxDWym6uJVGOzw==
+
 react-is@^17.0.1:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
@@ -2163,3 +2192,8 @@ yargs@^17.7.2:
     string-width "^4.2.3"
     y18n "^5.0.5"
     yargs-parser "^21.1.1"
+
+zod@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.4.3.tgz#b680f172885d18bbebf21a834ea25e55a1bbf356"
+  integrity sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==

@@ -21,6 +21,10 @@ export class InstrucaoRepositoryEmMemoria implements IInstrucaoRepository {
     return this.filtrar((instrucao) => instrucao.grau === grau)
   }
 
+  async listarTodas(): Promise<Instrucao[]> {
+    return [...this.salvos.values()]
+  }
+
   async excluir(id: string): Promise<void> {
     this.salvos.delete(id)
   }
