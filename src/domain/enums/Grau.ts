@@ -43,6 +43,11 @@ export function ordemDoGrau(grau: Grau): number {
   return ORDEM_DOS_GRAUS.indexOf(grau)
 }
 
+/** Graus já percorridos por quem está em `grau`, incluindo o próprio. */
+export function grausAte(grau: Grau): readonly Grau[] {
+  return ORDEM_DOS_GRAUS.slice(0, ordemDoGrau(grau) + 1)
+}
+
 /** `null` no último grau, que não tem promoção adiante. */
 export function proximoGrau(grau: Grau): Grau | null {
   return ORDEM_DOS_GRAUS[ordemDoGrau(grau) + 1] ?? null

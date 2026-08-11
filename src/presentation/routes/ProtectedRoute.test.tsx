@@ -4,19 +4,8 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from './ProtectedRoute'
 import { AuthContext, type Sessao } from '@/presentation/auth/AuthContext'
 import { usuarioCom } from '@/test/fixtures/usuarios'
+import { sessaoFake } from '@/test/fixtures/sessao'
 import { Papel } from '@/domain/enums/Papel'
-
-function sessaoFake(sobrescreve: Partial<Sessao> = {}): Sessao {
-  return {
-    usuario: null,
-    carregando: false,
-    erroDeSessao: null,
-    entrar: async () => {},
-    criarConta: async () => {},
-    sair: async () => {},
-    ...sobrescreve,
-  }
-}
 
 function renderizarRotaProtegida(sessao: Sessao, papeis?: readonly Papel[]) {
   render(
@@ -41,7 +30,7 @@ function renderizarRotaProtegida(sessao: Sessao, papeis?: readonly Papel[]) {
 
 describe('ProtectedRoute', () => {
   it('espera a sessão carregar antes de decidir', () => {
-    renderizarRotaProtegida(sessaoFake({ carregando: true }))
+    renderizarRotaProtegida(sessaoFake(null, { carregando: true }))
 
     expect(screen.getByRole('status')).toBeInTheDocument()
   })
@@ -53,13 +42,13 @@ describe('ProtectedRoute', () => {
   })
 
   it('libera usuário autenticado quando a rota não exige papel', () => {
-    renderizarRotaProtegida(sessaoFake({ usuario: usuarioCom(Papel.LEITOR) }))
+    renderizarRotaProtegida(sessaoFake(usuarioCom(Papel.LEITOR)))
 
     expect(screen.getByText('Área protegida')).toBeInTheDocument()
   })
 
   it('bloqueia papel fora da lista autorizada', () => {
-    renderizarRotaProtegida(sessaoFake({ usuario: usuarioCom(Papel.LEITOR) }), [
+    renderizarRotaProtegida(sessaoFake(usuarioCom(Papel.LEITOR)), [
       Papel.ADMIN,
     ])
 
@@ -67,7 +56,7 @@ describe('ProtectedRoute', () => {
   })
 
   it('libera papel presente na lista autorizada', () => {
-    renderizarRotaProtegida(sessaoFake({ usuario: usuarioCom(Papel.ADMIN) }), [
+    renderizarRotaProtegida(sessaoFake(usuarioCom(Papel.ADMIN)), [
       Papel.ADMIN,
     ])
 

@@ -42,6 +42,13 @@ export class FirestoreInstrucaoRepository implements IInstrucaoRepository {
     return this.consultar(where('grau', '==', grau))
   }
 
+  async listarTodas(): Promise<Instrucao[]> {
+    const snapshot = await getDocs(collection(this.db, COLECAO))
+    return snapshot.docs.map((d) =>
+      InstrucaoMapper.fromFirestore(d.id, d.data()),
+    )
+  }
+
   async excluir(id: string): Promise<void> {
     await deleteDoc(doc(this.db, COLECAO, id))
   }

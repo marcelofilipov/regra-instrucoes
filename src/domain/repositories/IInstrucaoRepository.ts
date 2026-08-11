@@ -11,5 +11,7 @@ export interface IInstrucaoRepository {
   buscarPorId(id: string): Promise<Instrucao | null>
   listarPorMembro(membroId: string): Promise<Instrucao[]>
   listarPorGrau(grau: Grau): Promise<Instrucao[]>
+  /** Base do painel de progresso: uma leitura só em vez de uma por membro. */
+  listarTodas(): Promise<Instrucao[]>
   excluir(id: string): Promise<void>
 }

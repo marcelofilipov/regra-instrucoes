@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { LoginPage } from '@/presentation/pages/LoginPage'
 import { DashboardPage } from '@/presentation/pages/DashboardPage'
+import { MembroDetalhesPage } from '@/presentation/pages/MembroDetalhesPage'
 import { SemPermissaoPage } from '@/presentation/pages/SemPermissaoPage'
 import { ProtectedRoute } from './ProtectedRoute'
 
@@ -14,6 +15,14 @@ export function AppRoutes() {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/membros/:membroId"
+        element={
+          <ProtectedRoute>
+            <MembroDetalhesPage />
           </ProtectedRoute>
         }
       />
