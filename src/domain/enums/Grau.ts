@@ -20,12 +20,12 @@ const TOTAL_DE_INSTRUCOES: Record<Grau, number> = {
   [Grau.MESTRE]: 3,
 }
 
-/** Ordem da progressão. `null` = último grau, sem promoção adiante. */
-const PROXIMO_GRAU: Record<Grau, Grau | null> = {
-  [Grau.APRENDIZ]: Grau.COMPANHEIRO,
-  [Grau.COMPANHEIRO]: Grau.MESTRE,
-  [Grau.MESTRE]: null,
-}
+/** Ordem canônica da progressão — fonte única para promoção e ordenação. */
+const ORDEM_DOS_GRAUS: readonly Grau[] = [
+  Grau.APRENDIZ,
+  Grau.COMPANHEIRO,
+  Grau.MESTRE,
+]
 
 export function isGrau(valor: unknown): valor is Grau {
   return (
@@ -38,8 +38,14 @@ export function totalDeInstrucoes(grau: Grau): number {
   return TOTAL_DE_INSTRUCOES[grau]
 }
 
+/** Posição na progressão (0 = aprendiz). Útil para ordenar histórico. */
+export function ordemDoGrau(grau: Grau): number {
+  return ORDEM_DOS_GRAUS.indexOf(grau)
+}
+
+/** `null` no último grau, que não tem promoção adiante. */
 export function proximoGrau(grau: Grau): Grau | null {
-  return PROXIMO_GRAU[grau]
+  return ORDEM_DOS_GRAUS[ordemDoGrau(grau) + 1] ?? null
 }
 
 /** Só permite avançar exatamente um grau na ordem canônica. */
