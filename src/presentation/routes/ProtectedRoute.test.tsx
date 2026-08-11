@@ -3,18 +3,8 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from './ProtectedRoute'
 import { AuthContext, type Sessao } from '@/presentation/auth/AuthContext'
-import { Usuario } from '@/domain/entities/Usuario'
+import { usuarioCom } from '@/test/fixtures/usuarios'
 import { Papel } from '@/domain/enums/Papel'
-
-function usuarioCom(papel: Papel): Usuario {
-  return Usuario.restaurar({
-    id: 'uid-1',
-    nome: 'Marcelo Rodrigo',
-    email: 'marcelo@loja.test',
-    papel,
-    criadoEm: new Date('2026-01-01'),
-  })
-}
 
 function sessaoFake(sobrescreve: Partial<Sessao> = {}): Sessao {
   return {

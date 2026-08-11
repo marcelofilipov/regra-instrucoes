@@ -3,6 +3,7 @@ import {
   Grau,
   isGrau,
   totalDeInstrucoes,
+  ordemDoGrau,
   proximoGrau,
   podePromover,
   garantirNumeroDeInstrucaoValido,
@@ -20,6 +21,11 @@ describe('Grau', () => {
     expect(isGrau('aprendiz')).toBe(true)
     expect(isGrau('venerável')).toBe(false)
     expect(isGrau(42)).toBe(false)
+  })
+
+  it('ordena os graus pela progressão', () => {
+    expect(ordemDoGrau(Grau.APRENDIZ)).toBeLessThan(ordemDoGrau(Grau.COMPANHEIRO))
+    expect(ordemDoGrau(Grau.COMPANHEIRO)).toBeLessThan(ordemDoGrau(Grau.MESTRE))
   })
 
   describe('progressão de grau', () => {
