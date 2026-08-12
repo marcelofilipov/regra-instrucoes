@@ -7,6 +7,7 @@ import { RegistrarInstrucaoUseCase } from '@/application/useCases/RegistrarInstr
 import { AlterarDataInstrucaoUseCase } from '@/application/useCases/AlterarDataInstrucaoUseCase'
 import { ListarInstrucoesPorMembroUseCase } from '@/application/useCases/ListarInstrucoesPorMembroUseCase'
 import { ListarHistoricoDoMembroUseCase } from '@/application/useCases/ListarHistoricoDoMembroUseCase'
+import { ExportarDadosUseCase } from '@/application/useCases/ExportarDadosUseCase'
 import { MembroRepositoryEmMemoria } from './MembroRepositoryEmMemoria'
 import { InstrucaoRepositoryEmMemoria } from './InstrucaoRepositoryEmMemoria'
 import { AuditoriaRepositoryEmMemoria } from './AuditoriaRepositoryEmMemoria'
@@ -59,6 +60,12 @@ export function criarGestaoEmMemoria(): GestaoEmMemoria {
         instrucoes,
       }),
       listarHistoricoDoMembro: new ListarHistoricoDoMembroUseCase({
+        instrucoes,
+        auditoria,
+        usuarios,
+      }),
+      exportarDados: new ExportarDadosUseCase({
+        membros,
         instrucoes,
         auditoria,
         usuarios,

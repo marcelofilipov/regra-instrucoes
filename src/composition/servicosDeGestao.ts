@@ -6,6 +6,7 @@ import { RegistrarInstrucaoUseCase } from '@/application/useCases/RegistrarInstr
 import { AlterarDataInstrucaoUseCase } from '@/application/useCases/AlterarDataInstrucaoUseCase'
 import { ListarInstrucoesPorMembroUseCase } from '@/application/useCases/ListarInstrucoesPorMembroUseCase'
 import { ListarHistoricoDoMembroUseCase } from '@/application/useCases/ListarHistoricoDoMembroUseCase'
+import { ExportarDadosUseCase } from '@/application/useCases/ExportarDadosUseCase'
 import { ListarProgressoDosMembrosUseCase } from '@/application/useCases/ListarProgressoDosMembrosUseCase'
 import { FirestoreMembroRepository } from '@/infrastructure/firebase/FirestoreMembroRepository'
 import { FirestoreInstrucaoRepository } from '@/infrastructure/firebase/FirestoreInstrucaoRepository'
@@ -23,6 +24,7 @@ export interface ServicosDeGestao {
   alterarDataInstrucao: AlterarDataInstrucaoUseCase
   listarInstrucoesPorMembro: ListarInstrucoesPorMembroUseCase
   listarHistoricoDoMembro: ListarHistoricoDoMembroUseCase
+  exportarDados: ExportarDadosUseCase
 }
 
 export function criarServicosDeGestao(db: Firestore): ServicosDeGestao {
@@ -54,6 +56,12 @@ export function criarServicosDeGestao(db: Firestore): ServicosDeGestao {
       instrucoes,
     }),
     listarHistoricoDoMembro: new ListarHistoricoDoMembroUseCase({
+      instrucoes,
+      auditoria,
+      usuarios,
+    }),
+    exportarDados: new ExportarDadosUseCase({
+      membros,
       instrucoes,
       auditoria,
       usuarios,

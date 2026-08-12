@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DashboardPage } from './DashboardPage'
@@ -109,5 +109,71 @@ describe('DashboardPage', () => {
       await screen.findByText('Informe o nome completo.'),
     ).toBeInTheDocument()
     expect(gestao.membros.salvos.size).toBe(0)
+  })
+})
+
+describe('Exportar dados', () => {
+  // jsdom não implementa objectURL nem navegação de download; o que interessa
+  // aqui é o que o app entrega ao navegador, então capturamos o clique no link.
+  let baixados: { nome: string; conteudo: string }[]
+  let cliqueOriginal: () => void
+
+  beforeEach(() => {
+    baixados = []
+    URL.createObjectURL = vi.fn(() => 'blob:fake')
+    URL.revokeObjectURL = vi.fn()
+    cliqueOriginal = HTMLAnchorElement.prototype.click
+    HTMLAnchorElement.prototype.click = function (this: HTMLAnchorElement) {
+      baixados.push({ nome: this.download, conteudo: '' })
+    }
+  })
+
+  afterEach(() => {
+    HTMLAnchorElement.prototype.click = cliqueOriginal
+  })
+
+  it('editor não vê a exportação', async () => {
+    renderizar(editor())
+
+    await screen.findByText('Membros')
+    expect(screen.queryByText('Exportar dados')).not.toBeInTheDocument()
+  })
+
+  it('leitor não vê a exportação', async () => {
+    renderizar(leitor())
+
+    await screen.findByText('Membros')
+    expect(screen.queryByText('Exportar dados')).not.toBeInTheDocument()
+  })
+
+  it('admin baixa um JSON único', async () => {
+    await semearMembro('m1', 'Marcelo Rodrigo')
+
+    renderizar(admin())
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Baixar JSON' }),
+    )
+
+    await waitFor(() => expect(baixados).toHaveLength(1))
+    expect(baixados[0].nome).toMatch(/^loja-\d{4}-\d{2}-\d{2}\.json$/)
+  })
+
+  it('admin baixa uma planilha por coleção', async () => {
+    await semearMembro('m1', 'Marcelo Rodrigo')
+
+    renderizar(admin())
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Baixar CSV' }),
+    )
+
+    await waitFor(() => expect(baixados).toHaveLength(4))
+    expect(baixados.map((a) => a.nome.replace(/-\d{4}-\d{2}-\d{2}/, ''))).toEqual([
+      'loja-membros.csv',
+      'loja-instrucoes.csv',
+      'loja-usuarios.csv',
+      'loja-auditoria.csv',
+    ])
   })
 })

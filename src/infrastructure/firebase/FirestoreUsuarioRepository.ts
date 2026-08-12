@@ -1,4 +1,11 @@
-import { doc, getDoc, setDoc, type Firestore } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  type Firestore,
+} from 'firebase/firestore'
 import type { IUsuarioRepository } from '@/domain/repositories/IUsuarioRepository'
 import { Usuario } from '@/domain/entities/Usuario'
 import { UsuarioMapper } from './mappers/UsuarioMapper'
@@ -21,5 +28,10 @@ export class FirestoreUsuarioRepository implements IUsuarioRepository {
     const snapshot = await getDoc(doc(this.db, COLECAO, id))
     if (!snapshot.exists()) return null
     return UsuarioMapper.fromFirestore(snapshot.id, snapshot.data())
+  }
+
+  async listar(): Promise<Usuario[]> {
+    const snapshot = await getDocs(collection(this.db, COLECAO))
+    return snapshot.docs.map((d) => UsuarioMapper.fromFirestore(d.id, d.data()))
   }
 }

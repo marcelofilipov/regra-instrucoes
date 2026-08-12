@@ -14,4 +14,6 @@ export interface IAuditoriaRepository {
    * Lista vazia devolve vazio sem ir ao banco.
    */
   listarPorInstrucoes(instrucaoIds: readonly string[]): Promise<RegistroDeAuditoria[]>
+  /** Trilha inteira, do mais recente para o mais antigo. Usada na exportação. */
+  listarTodos(): Promise<RegistroDeAuditoria[]>
 }
