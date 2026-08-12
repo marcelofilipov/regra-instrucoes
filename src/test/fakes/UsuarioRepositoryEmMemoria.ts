@@ -12,4 +12,8 @@ export class UsuarioRepositoryEmMemoria implements IUsuarioRepository {
   async buscarPorId(id: string): Promise<Usuario | null> {
     return this.salvos.get(id) ?? null
   }
+
+  async listar(): Promise<Usuario[]> {
+    return [...this.salvos.values()]
+  }
 }

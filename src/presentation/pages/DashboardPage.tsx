@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { podeRegistrar } from '@/domain/enums/Papel'
+import { podeAlterar, podeRegistrar } from '@/domain/enums/Papel'
 import { useAuth } from '@/presentation/hooks/useAuth'
 import {
   useCadastrarMembro,
   useProgressoDosMembros,
 } from '@/presentation/hooks/useMembros'
+import { ExportarDados } from '@/presentation/components/ExportarDados'
 import { MembroForm } from '@/presentation/components/MembroForm'
 import { ProgressoGrauBadge } from '@/presentation/components/ProgressoGrauBadge'
 import { ROTULO_DO_PAPEL } from '@/presentation/rotulos'
@@ -101,6 +102,8 @@ export function DashboardPage() {
           ))}
         </ul>
       </section>
+
+      {podeAlterar(usuario.papel) && <ExportarDados />}
     </main>
   )
 }

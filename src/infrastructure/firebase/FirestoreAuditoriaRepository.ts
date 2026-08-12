@@ -32,6 +32,13 @@ export class FirestoreAuditoriaRepository implements IAuditoriaRepository {
     return lotes.flat().sort(doMaisRecente)
   }
 
+  async listarTodos(): Promise<RegistroDeAuditoria[]> {
+    const snapshot = await getDocs(collection(this.db, COLECAO_DE_AUDITORIA))
+    return snapshot.docs
+      .map((d) => AuditoriaMapper.fromFirestore(d.id, d.data()))
+      .sort(doMaisRecente)
+  }
+
   private async consultarLote(
     instrucaoIds: readonly string[],
   ): Promise<RegistroDeAuditoria[]> {

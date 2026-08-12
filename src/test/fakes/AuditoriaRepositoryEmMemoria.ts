@@ -12,12 +12,20 @@ export class AuditoriaRepositoryEmMemoria implements IAuditoriaRepository {
     this.registrados.push(registro)
   }
 
+  async listarTodos(): Promise<RegistroDeAuditoria[]> {
+    return [...this.registrados].sort(doMaisRecente)
+  }
+
   async listarPorInstrucoes(
     instrucaoIds: readonly string[],
   ): Promise<RegistroDeAuditoria[]> {
     const procurados = new Set(instrucaoIds)
     return this.registrados
       .filter((registro) => procurados.has(registro.instrucaoId))
-      .sort((a, b) => b.alteradoEm.getTime() - a.alteradoEm.getTime())
+      .sort(doMaisRecente)
   }
+}
+
+function doMaisRecente(a: RegistroDeAuditoria, b: RegistroDeAuditoria): number {
+  return b.alteradoEm.getTime() - a.alteradoEm.getTime()
 }

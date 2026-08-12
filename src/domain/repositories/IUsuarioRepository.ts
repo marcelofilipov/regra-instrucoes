@@ -8,4 +8,6 @@ import type { Usuario } from '@/domain/entities/Usuario'
 export interface IUsuarioRepository {
   salvar(usuario: Usuario): Promise<void>
   buscarPorId(id: string): Promise<Usuario | null>
+  /** Base da exportação: sem os papéis, um backup não restaura quem é quem. */
+  listar(): Promise<Usuario[]>
 }
