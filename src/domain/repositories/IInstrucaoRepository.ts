@@ -1,4 +1,5 @@
 import type { Instrucao } from '@/domain/entities/Instrucao'
+import type { RegistroDeAuditoria } from '@/domain/entities/RegistroDeAuditoria'
 import type { Grau } from '@/domain/enums/Grau'
 
 /**
@@ -8,6 +9,15 @@ import type { Grau } from '@/domain/enums/Grau'
  */
 export interface IInstrucaoRepository {
   salvar(instrucao: Instrucao): Promise<void>
+  /**
+   * Grava a instrução alterada e o log da alteração numa escrita atômica: os
+   * dois ou nenhum. Único caminho para alterar uma instrução já registrada —
+   * por isso o log e a alteração andam no mesmo método, e não em dois.
+   */
+  salvarComAuditoria(
+    instrucao: Instrucao,
+    registro: RegistroDeAuditoria,
+  ): Promise<void>
   buscarPorId(id: string): Promise<Instrucao | null>
   listarPorMembro(membroId: string): Promise<Instrucao[]>
   listarPorGrau(grau: Grau): Promise<Instrucao[]>

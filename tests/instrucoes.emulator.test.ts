@@ -48,6 +48,7 @@ function registrarComoEditor(db: Firestore): RegistrarInstrucaoUseCase {
 function alterarDataCom(db: Firestore): AlterarDataInstrucaoUseCase {
   return new AlterarDataInstrucaoUseCase({
     instrucoes: new FirestoreInstrucaoRepository(db),
+    geradorDeId: new GeradorDeIdFake(),
   })
 }
 

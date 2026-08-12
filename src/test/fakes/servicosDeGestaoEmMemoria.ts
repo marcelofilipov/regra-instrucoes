@@ -6,14 +6,19 @@ import { ObterMembroUseCase } from '@/application/useCases/ObterMembroUseCase'
 import { RegistrarInstrucaoUseCase } from '@/application/useCases/RegistrarInstrucaoUseCase'
 import { AlterarDataInstrucaoUseCase } from '@/application/useCases/AlterarDataInstrucaoUseCase'
 import { ListarInstrucoesPorMembroUseCase } from '@/application/useCases/ListarInstrucoesPorMembroUseCase'
+import { ListarHistoricoDoMembroUseCase } from '@/application/useCases/ListarHistoricoDoMembroUseCase'
 import { MembroRepositoryEmMemoria } from './MembroRepositoryEmMemoria'
 import { InstrucaoRepositoryEmMemoria } from './InstrucaoRepositoryEmMemoria'
+import { AuditoriaRepositoryEmMemoria } from './AuditoriaRepositoryEmMemoria'
+import { UsuarioRepositoryEmMemoria } from './UsuarioRepositoryEmMemoria'
 import { GeradorDeIdFake } from './GeradorDeIdFake'
 
 export interface GestaoEmMemoria {
   servicos: ServicosDeGestao
   membros: MembroRepositoryEmMemoria
   instrucoes: InstrucaoRepositoryEmMemoria
+  auditoria: AuditoriaRepositoryEmMemoria
+  usuarios: UsuarioRepositoryEmMemoria
 }
 
 /**
@@ -22,13 +27,17 @@ export interface GestaoEmMemoria {
  */
 export function criarGestaoEmMemoria(): GestaoEmMemoria {
   const membros = new MembroRepositoryEmMemoria()
-  const instrucoes = new InstrucaoRepositoryEmMemoria()
+  const auditoria = new AuditoriaRepositoryEmMemoria()
+  const instrucoes = new InstrucaoRepositoryEmMemoria(auditoria)
+  const usuarios = new UsuarioRepositoryEmMemoria()
   const geradorDeId = new GeradorDeIdFake()
   const listarMembros = new ListarMembrosUseCase({ membros })
 
   return {
     membros,
     instrucoes,
+    auditoria,
+    usuarios,
     servicos: {
       cadastrarMembro: new CadastrarMembroUseCase({ membros, geradorDeId }),
       listarMembros,
@@ -42,9 +51,17 @@ export function criarGestaoEmMemoria(): GestaoEmMemoria {
         membros,
         geradorDeId,
       }),
-      alterarDataInstrucao: new AlterarDataInstrucaoUseCase({ instrucoes }),
+      alterarDataInstrucao: new AlterarDataInstrucaoUseCase({
+        instrucoes,
+        geradorDeId,
+      }),
       listarInstrucoesPorMembro: new ListarInstrucoesPorMembroUseCase({
         instrucoes,
+      }),
+      listarHistoricoDoMembro: new ListarHistoricoDoMembroUseCase({
+        instrucoes,
+        auditoria,
+        usuarios,
       }),
     },
   }
