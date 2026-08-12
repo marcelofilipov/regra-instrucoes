@@ -11,6 +11,14 @@ import { MembroForm } from '@/presentation/components/MembroForm'
 import { ProgressoGrauBadge } from '@/presentation/components/ProgressoGrauBadge'
 import { ROTULO_DO_PAPEL } from '@/presentation/rotulos'
 import { mensagemDeErro } from '@/presentation/erros'
+import {
+  BOTAO_DESTAQUE,
+  BOTAO_SECUNDARIO,
+  CARTAO,
+  LINK,
+  MENSAGEM_DE_ERRO,
+  PAGINA,
+} from '@/presentation/estilos'
 
 export function DashboardPage() {
   const { usuario, sair } = useAuth()
@@ -22,7 +30,7 @@ export function DashboardPage() {
   const podeCadastrar = podeRegistrar(usuario.papel)
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-6 p-6">
+    <main className={PAGINA}>
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-marinho">
@@ -35,7 +43,7 @@ export function DashboardPage() {
         <button
           type="button"
           onClick={sair}
-          className="rounded-md border border-pedra/40 px-3 py-1.5 text-sm text-marinho"
+          className={BOTAO_SECUNDARIO}
         >
           Sair
         </button>
@@ -46,7 +54,7 @@ export function DashboardPage() {
           <button
             type="button"
             onClick={() => setMostrandoFormulario(!mostrandoFormulario)}
-            className="w-fit rounded-md bg-dourado px-4 py-2 font-medium text-marinho"
+            className={`w-full sm:w-fit ${BOTAO_DESTAQUE}`}
           >
             {mostrandoFormulario ? 'Cancelar' : 'Novo membro'}
           </button>
@@ -73,7 +81,7 @@ export function DashboardPage() {
         {painel.isPending && <p className="text-pedra">Carregando membros…</p>}
 
         {painel.isError && (
-          <p role="alert" className="text-sm text-red-700">
+          <p role="alert" className={MENSAGEM_DE_ERRO}>
             {mensagemDeErro(painel.error)}
           </p>
         )}
@@ -89,11 +97,11 @@ export function DashboardPage() {
           {painel.data?.map(({ membro, progressoAtual }) => (
             <li
               key={membro.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-white p-4 shadow-sm"
+              className={`flex flex-wrap items-center justify-between gap-3 ${CARTAO}`}
             >
               <Link
                 to={`/membros/${membro.id}`}
-                className="font-medium text-marinho underline underline-offset-2"
+                className={`font-medium ${LINK}`}
               >
                 {membro.nome}
               </Link>

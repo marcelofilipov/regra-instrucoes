@@ -5,6 +5,13 @@ import { Grau } from '@/domain/enums/Grau'
 import type { DadosDeNovoMembro } from '@/application/useCases/CadastrarMembroUseCase'
 import { ROTULO_DO_GRAU } from '@/presentation/rotulos'
 import { deTextoParaData } from '@/presentation/datas'
+import {
+  BOTAO_PRIMARIO,
+  CAMPO,
+  CARTAO,
+  MENSAGEM_DE_ERRO,
+  ROTULO,
+} from '@/presentation/estilos'
 
 const esquema = z.object({
   nome: z.string().trim().min(3, 'Informe o nome completo.'),
@@ -46,33 +53,33 @@ export function MembroForm({ aoEnviar, enviando, erro }: MembroFormProps) {
   return (
     <form
       onSubmit={handleSubmit(enviar)}
-      className="flex flex-col gap-3 rounded-lg bg-white p-4 shadow-sm"
+      className={`flex flex-col gap-3 ${CARTAO}`}
       aria-label="Cadastrar membro"
     >
       <div className="flex flex-col gap-1">
-        <label htmlFor="nome" className="text-sm font-medium text-marinho">
+        <label htmlFor="nome" className={ROTULO}>
           Nome
         </label>
         <input
           id="nome"
           {...register('nome')}
-          className="rounded-md border border-pedra/40 px-3 py-2"
+          className={CAMPO}
         />
         {errors.nome && (
-          <span role="alert" className="text-sm text-red-700">
+          <span role="alert" className={MENSAGEM_DE_ERRO}>
             {errors.nome.message}
           </span>
         )}
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="grauAtual" className="text-sm font-medium text-marinho">
+        <label htmlFor="grauAtual" className={ROTULO}>
           Grau atual
         </label>
         <select
           id="grauAtual"
           {...register('grauAtual')}
-          className="rounded-md border border-pedra/40 px-3 py-2"
+          className={CAMPO}
         >
           {Object.values(Grau).map((grau) => (
             <option key={grau} value={grau}>
@@ -85,7 +92,7 @@ export function MembroForm({ aoEnviar, enviando, erro }: MembroFormProps) {
       <div className="flex flex-col gap-1">
         <label
           htmlFor="dataIniciacao"
-          className="text-sm font-medium text-marinho"
+          className={ROTULO}
         >
           Data de iniciação (opcional)
         </label>
@@ -93,12 +100,12 @@ export function MembroForm({ aoEnviar, enviando, erro }: MembroFormProps) {
           id="dataIniciacao"
           type="date"
           {...register('dataIniciacao')}
-          className="rounded-md border border-pedra/40 px-3 py-2"
+          className={CAMPO}
         />
       </div>
 
       {erro !== null && (
-        <p role="alert" className="text-sm text-red-700">
+        <p role="alert" className={MENSAGEM_DE_ERRO}>
           {erro}
         </p>
       )}
@@ -106,7 +113,7 @@ export function MembroForm({ aoEnviar, enviando, erro }: MembroFormProps) {
       <button
         type="submit"
         disabled={enviando}
-        className="w-fit rounded-md bg-marinho px-4 py-2 font-medium text-marfim disabled:opacity-60"
+        className={`w-full sm:w-fit ${BOTAO_PRIMARIO}`}
       >
         Cadastrar membro
       </button>

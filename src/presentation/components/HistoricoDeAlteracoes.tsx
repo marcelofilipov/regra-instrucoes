@@ -1,6 +1,7 @@
 import type { AlteracaoDoHistorico } from '@/application/useCases/ListarHistoricoDoMembroUseCase'
 import { ROTULO_DO_GRAU } from '@/presentation/rotulos'
 import { formatarData, formatarDataHora } from '@/presentation/datas'
+import { CARTAO } from '@/presentation/estilos'
 
 interface HistoricoDeAlteracoesProps {
   alteracoes: readonly AlteracaoDoHistorico[]
@@ -17,7 +18,7 @@ export function HistoricoDeAlteracoes({ alteracoes }: HistoricoDeAlteracoesProps
   return (
     <section className="flex flex-col gap-2">
       <h2 className="text-lg font-medium text-marinho">Histórico de alterações</h2>
-      <ul className="flex flex-col gap-2 rounded-lg bg-white p-4 text-sm shadow-sm">
+      <ul className={`flex flex-col gap-2 text-sm ${CARTAO}`}>
         {alteracoes.map((alteracao) => (
           <li
             key={alteracao.registro.id}

@@ -3,6 +3,11 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/presentation/hooks/useAuth'
 import { CampoDeTexto } from '@/presentation/components/CampoDeTexto'
 import { mensagemDeErro } from '@/presentation/erros'
+import {
+  BOTAO_DISCRETO,
+  BOTAO_PRIMARIO,
+  MENSAGEM_DE_ERRO,
+} from '@/presentation/estilos'
 
 type Modo = 'entrar' | 'criar-conta'
 
@@ -54,7 +59,7 @@ export function LoginPage() {
     <main className="flex min-h-screen items-center justify-center p-4">
       <form
         onSubmit={submeter}
-        className="flex w-full max-w-sm flex-col gap-4 rounded-lg bg-white p-6 shadow-md"
+        className="flex w-full max-w-sm flex-col gap-4 rounded-lg bg-white p-4 shadow-md sm:p-6"
       >
         <header className="flex flex-col gap-1">
           <h1 className="text-xl font-semibold text-marinho">
@@ -96,7 +101,7 @@ export function LoginPage() {
         />
 
         {(erro ?? erroDeSessao) !== null && (
-          <p role="alert" className="text-sm text-red-700">
+          <p role="alert" className={MENSAGEM_DE_ERRO}>
             {erro ?? erroDeSessao}
           </p>
         )}
@@ -104,7 +109,7 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={enviando}
-          className="rounded-md bg-marinho px-4 py-2 font-medium text-marfim disabled:opacity-60"
+          className={BOTAO_PRIMARIO}
         >
           {criandoConta ? 'Criar conta' : 'Entrar'}
         </button>
@@ -112,7 +117,7 @@ export function LoginPage() {
         <button
           type="button"
           onClick={alternarModo}
-          className="text-sm text-pedra underline underline-offset-2"
+          className={`text-sm ${BOTAO_DISCRETO}`}
         >
           {criandoConta
             ? 'Já tenho conta — entrar'

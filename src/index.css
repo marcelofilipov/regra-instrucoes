@@ -3,14 +3,23 @@
 /*
  * Paleta do projeto (Seção 7 do plano) — azul e dourado maçônicos, só cor.
  * Exposta como tokens de tema do Tailwind v4 (`@theme`) para virar utilitários
- * como `bg-marinho`, `text-dourado`, etc.
+ * como `bg-marinho`, `text-marfim`, etc.
+ *
+ * Os hex saíram da paleta de referência do plano, com um ajuste medido: o plano
+ * pedia para conferir contraste antes de usar, e o cinza original (#6B7280)
+ * dava 4,36:1 sobre o marfim — abaixo dos 4,5:1 da WCAG AA para texto normal.
+ * Escurecido para 5,38:1. As razões estão travadas em `paleta.test.ts`.
+ *
+ * O dourado NÃO serve para texto nem para indicador de foco sobre fundo claro:
+ * dá 2,18:1 sobre o marfim. Ele é cor de preenchimento, e o que vai por cima
+ * dele é marinho (5,88:1).
  */
 @theme {
   --color-marinho: #1b2a4a; /* Primária */
-  --color-dourado: #c9a227; /* Destaque / Ação */
+  --color-dourado: #c9a227; /* Destaque / Ação — só como fundo */
   --color-marfim: #f5f3ee; /* Fundo claro */
   --color-ardosia: #1a1a1a; /* Texto / Modo escuro */
-  --color-pedra: #6b7280; /* Secundário / neutro */
+  --color-pedra: #5c6472; /* Secundário / neutro */
 }
 
 body {

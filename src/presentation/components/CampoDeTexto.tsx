@@ -1,3 +1,5 @@
+import { CAMPO, ROTULO } from '@/presentation/estilos'
+
 interface CampoDeTextoProps {
   id: string
   rotulo: string
@@ -17,7 +19,7 @@ export function CampoDeTexto({
 }: CampoDeTextoProps) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium text-marinho">
+      <label htmlFor={id} className={ROTULO}>
         {rotulo}
       </label>
       <input
@@ -27,7 +29,7 @@ export function CampoDeTexto({
         onChange={(evento) => aoMudar(evento.target.value)}
         autoComplete={autoComplete}
         required
-        className="rounded-md border border-pedra/40 bg-white px-3 py-2 text-ardosia outline-none focus:border-marinho focus:ring-2 focus:ring-dourado/50"
+        className={CAMPO}
       />
     </div>
   )
