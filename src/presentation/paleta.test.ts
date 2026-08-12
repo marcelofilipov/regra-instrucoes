@@ -9,8 +9,8 @@ import { describe, expect, it } from 'vitest'
  * reprovava e ninguém notou até a Fase 7.
  */
 
-// Caminho a partir da raiz do projeto: os testes rodam em jsdom, onde
-// `import.meta.url` é uma URL http e não serve para ler arquivo.
+// Lido do disco, e não por import: o Vitest roda com `css: false`, então um
+// `import '...?raw'` de CSS volta vazio.
 const CSS = readFileSync(resolve(process.cwd(), 'src/index.css'), 'utf8')
 
 /** WCAG 2.1 — 1.4.3 (texto) e 1.4.11 (não-texto). */
