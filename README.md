@@ -5,6 +5,8 @@ com histórico de progressão.
 
 [![Licença: AGPL v3](https://img.shields.io/badge/Licen%C3%A7a-AGPL%20v3-blue.svg)](./LICENSE)
 
+**No ar:** https://regua-instrucoes.web.app
+
 Cada membro percorre uma sequência fixa de instruções em cada grau — 7 no
 Aprendiz, 5 no Companheiro, 3 no Mestre. O app registra quando cada uma foi
 recebida, mostra o progresso e mantém uma trilha de auditoria de toda correção
@@ -27,7 +29,9 @@ append-only para todo mundo, inclusive para o Admin.
 | **Admin** | tudo do Editor + corrigir data já gravada, excluir, gerir papéis e exportar dados |
 
 Todo usuário nasce `leitor`. A promoção é ato de um Admin — ninguém se
-autopromove, e isso também está na Security Rule.
+autopromove, e isso também está na Security Rule. Hoje ela é feita **escrevendo
+direto no Firestore**: a permissão existe na rule, mas ainda não há tela para
+exercê-la.
 
 ## Stack
 
@@ -139,10 +143,24 @@ sem apagar os dados locais.
 - [x] Fase 6 — trilha de auditoria gravada no mesmo `writeBatch` da alteração
 - [x] Fase 6.1 — exportação manual dos dados (JSON e CSV) para o Admin
 - [x] Fase 7 — paleta aplicada, mobile-first, contraste WCAG AA
-- [ ] Fase 8 — projeto Firebase em produção, deploy no Hosting, checklist final
+- [x] Fase 8 — projeto Firebase em produção, rules e Hosting publicados
+- [x] Progresso visual — régua por obreiro e resumo da Loja no painel
 
-Até aqui o projeto roda **inteiramente em emulador**: ainda não existe projeto
-Firebase na nuvem. Criá-lo é trabalho da Fase 8.
+O app está **em produção** em https://regua-instrucoes.web.app, sobre um projeto
+Firebase no plano Spark em `southamerica-east1`. O desenvolvimento continua
+rodando em emulador; `yarn build` usa o `.env.production`, que **não é
+versionado** — regere-o com `firebase apps:sdkconfig WEB <appId>`.
+
+### O que ainda não existe
+
+- **Tela de gestão de usuários.** Trocar o papel de alguém hoje exige escrever
+  direto no Firestore. A rule já permite (`allow update: if ehAdmin()`), mas não
+  há caso de uso nem interface — inclusive o primeiro Admin nasce assim.
+- **Cadastro fechado.** Qualquer pessoa cria conta, nasce `leitor` e passa a ler
+  todas as coleções. É intencional e está no [`SECURITY.md`](./SECURITY.md), mas
+  precisa de decisão antes de entrar dado real de membro.
+- **CI.** A validação é local: `yarn test`, `yarn test:emulator`, `yarn build`,
+  `yarn lint`.
 
 ## Restrições do plano Spark
 
