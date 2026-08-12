@@ -5,7 +5,7 @@ as convenções do projeto.
 
 ## Antes de começar
 
-- Procure uma [issue](https://github.com/marcelofilipov/regra-instrucoes/issues)
+- Procure uma [issue](https://github.com/marcelofilipov/regua-instrucoes/issues)
   aberta ou abra uma descrevendo o que pretende fazer, para evitar trabalho
   duplicado.
 - Para mudanças grandes, comente na issue e alinhe a abordagem antes de codar.

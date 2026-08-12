@@ -1,0 +1,28 @@
+{
+  /*
+   * Projeto TS dos testes. Existe porque o `tsconfig.app.json` é o do
+   * navegador: sem os tipos do Node, um teste que leia arquivo (como o de
+   * contraste da paleta) quebra o `tsc -b` sem quebrar o `vitest`.
+   *
+   * De quebra, passa a checar `tests/` — os testes de emulador ficavam fora de
+   * qualquer projeto e nunca foram compilados.
+   */
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.test.tsbuildinfo",
+    "types": [
+      "node",
+      "vite/client",
+      "vitest/globals",
+      "@testing-library/jest-dom"
+    ]
+  },
+  "include": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/test/**/*.ts",
+    "src/test/**/*.tsx",
+    "tests/**/*.ts",
+    "vitest.emulator.config.ts"
+  ]
+}
