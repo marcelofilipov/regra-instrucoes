@@ -5,9 +5,12 @@ import { ObterMembroUseCase } from '@/application/useCases/ObterMembroUseCase'
 import { RegistrarInstrucaoUseCase } from '@/application/useCases/RegistrarInstrucaoUseCase'
 import { AlterarDataInstrucaoUseCase } from '@/application/useCases/AlterarDataInstrucaoUseCase'
 import { ListarInstrucoesPorMembroUseCase } from '@/application/useCases/ListarInstrucoesPorMembroUseCase'
+import { ListarHistoricoDoMembroUseCase } from '@/application/useCases/ListarHistoricoDoMembroUseCase'
 import { ListarProgressoDosMembrosUseCase } from '@/application/useCases/ListarProgressoDosMembrosUseCase'
 import { FirestoreMembroRepository } from '@/infrastructure/firebase/FirestoreMembroRepository'
 import { FirestoreInstrucaoRepository } from '@/infrastructure/firebase/FirestoreInstrucaoRepository'
+import { FirestoreAuditoriaRepository } from '@/infrastructure/firebase/FirestoreAuditoriaRepository'
+import { FirestoreUsuarioRepository } from '@/infrastructure/firebase/FirestoreUsuarioRepository'
 import { UuidGeradorDeId } from '@/infrastructure/UuidGeradorDeId'
 
 /** Casos de uso de membros e instruções, como a apresentação os enxerga. */
@@ -19,11 +22,14 @@ export interface ServicosDeGestao {
   registrarInstrucao: RegistrarInstrucaoUseCase
   alterarDataInstrucao: AlterarDataInstrucaoUseCase
   listarInstrucoesPorMembro: ListarInstrucoesPorMembroUseCase
+  listarHistoricoDoMembro: ListarHistoricoDoMembroUseCase
 }
 
 export function criarServicosDeGestao(db: Firestore): ServicosDeGestao {
   const membros = new FirestoreMembroRepository(db)
   const instrucoes = new FirestoreInstrucaoRepository(db)
+  const auditoria = new FirestoreAuditoriaRepository(db)
+  const usuarios = new FirestoreUsuarioRepository(db)
   const geradorDeId = new UuidGeradorDeId()
   const listarMembros = new ListarMembrosUseCase({ membros })
 
@@ -40,9 +46,17 @@ export function criarServicosDeGestao(db: Firestore): ServicosDeGestao {
       membros,
       geradorDeId,
     }),
-    alterarDataInstrucao: new AlterarDataInstrucaoUseCase({ instrucoes }),
+    alterarDataInstrucao: new AlterarDataInstrucaoUseCase({
+      instrucoes,
+      geradorDeId,
+    }),
     listarInstrucoesPorMembro: new ListarInstrucoesPorMembroUseCase({
       instrucoes,
+    }),
+    listarHistoricoDoMembro: new ListarHistoricoDoMembroUseCase({
+      instrucoes,
+      auditoria,
+      usuarios,
     }),
   }
 }

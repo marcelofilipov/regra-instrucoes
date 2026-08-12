@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:emulator": "firebase emulators:exec --only firestore --project demo-loja \"vitest run --config vitest.emulator.config.ts\"",
+    "test:emulator": "firebase emulators:exec --config firebase.test.json --only firestore --project demo-loja-tests \"vitest run --config vitest.emulator.config.ts\"",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {

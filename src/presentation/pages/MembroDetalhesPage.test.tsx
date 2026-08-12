@@ -123,6 +123,54 @@ describe('MembroDetalhesPage', () => {
     expect(screen.getByText('(corrigida)')).toBeInTheDocument()
   })
 
+  it('ficha sem correção não mostra a seção de histórico', async () => {
+    await semearInstrucao(1)
+
+    renderizar(admin())
+
+    await screen.findByText('Marcelo Rodrigo')
+    expect(
+      screen.queryByText('Histórico de alterações'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('corrigida a data, o histórico mostra o de-para e quem corrigiu', async () => {
+    await semearInstrucao(1)
+    await gestao.usuarios.salvar(admin())
+
+    renderizar(admin())
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Corrigir' }),
+    )
+    await userEvent.clear(screen.getByLabelText('Nova data'))
+    await userEvent.type(screen.getByLabelText('Nova data'), '2026-03-17')
+    await userEvent.click(screen.getByRole('button', { name: 'Salvar' }))
+
+    expect(
+      await screen.findByText('Histórico de alterações'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('data: 10/03/2026 → 17/03/2026'),
+    ).toBeInTheDocument()
+    expect(screen.getByText(/por Usuário admin em/)).toBeInTheDocument()
+  })
+
+  it('leitor também enxerga a trilha — auditoria é para conferência', async () => {
+    await semearInstrucao(1)
+    await gestao.usuarios.salvar(admin())
+    await gestao.servicos.alterarDataInstrucao.executar(admin(), {
+      instrucaoId: 'i1',
+      novaData: new Date(2026, 2, 17, 12),
+    })
+
+    renderizar(leitor())
+
+    expect(
+      await screen.findByText('Histórico de alterações'),
+    ).toBeInTheDocument()
+  })
+
   it('avisa quando o membro não existe', async () => {
     gestao.membros.salvos.clear()
 

@@ -20,3 +20,11 @@ export function paraTextoDeInput(data: Date): string {
 export function formatarData(data: Date): string {
   return data.toLocaleDateString('pt-BR')
 }
+
+/** Auditoria precisa da hora: duas correções no mesmo dia têm de se distinguir. */
+export function formatarDataHora(data: Date): string {
+  return data.toLocaleString('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  })
+}

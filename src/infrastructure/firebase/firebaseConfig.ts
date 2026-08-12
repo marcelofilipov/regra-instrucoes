@@ -1,6 +1,7 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getFirestore, connectFirestoreEmulator, type Firestore } from 'firebase/firestore'
 import { getAuth, connectAuthEmulator, type Auth } from 'firebase/auth'
+import { lerEnderecosDosEmuladores } from './emuladores'
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -15,8 +16,9 @@ export const app: FirebaseApp = initializeApp(config)
 export const db: Firestore = getFirestore(app)
 export const auth: Auth = getAuth(app)
 
-// Em desenvolvimento, aponta para os emuladores (portas do firebase.json).
+// Em desenvolvimento, aponta para os emuladores.
 if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
-  connectFirestoreEmulator(db, '127.0.0.1', 8080)
-  connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true })
+  const { host, portaDoFirestore, portaDoAuth } = lerEnderecosDosEmuladores(import.meta.env)
+  connectFirestoreEmulator(db, host, portaDoFirestore)
+  connectAuthEmulator(auth, `http://${host}:${portaDoAuth}`, { disableWarnings: true })
 }

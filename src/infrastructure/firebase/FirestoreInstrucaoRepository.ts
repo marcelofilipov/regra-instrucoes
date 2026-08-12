@@ -7,12 +7,16 @@ import {
   query,
   setDoc,
   where,
+  writeBatch,
   type Firestore,
 } from 'firebase/firestore'
 import type { IInstrucaoRepository } from '@/domain/repositories/IInstrucaoRepository'
 import { Instrucao } from '@/domain/entities/Instrucao'
+import type { RegistroDeAuditoria } from '@/domain/entities/RegistroDeAuditoria'
 import type { Grau } from '@/domain/enums/Grau'
 import { InstrucaoMapper } from './mappers/InstrucaoMapper'
+import { AuditoriaMapper } from './mappers/AuditoriaMapper'
+import { COLECAO_DE_AUDITORIA } from './FirestoreAuditoriaRepository'
 
 const COLECAO = 'instrucoes'
 
@@ -26,6 +30,27 @@ export class FirestoreInstrucaoRepository implements IInstrucaoRepository {
   async salvar(instrucao: Instrucao): Promise<void> {
     const ref = doc(this.db, COLECAO, instrucao.id)
     await setDoc(ref, InstrucaoMapper.toFirestore(instrucao))
+  }
+
+  /**
+   * `writeBatch` é o que dá atomicidade sem Cloud Function: as duas escritas
+   * vão num commit só, e a rule de `auditoria` (create só para admin) é avaliada
+   * junto com a de `instrucoes` — se uma reprovar, nenhuma é aplicada.
+   */
+  async salvarComAuditoria(
+    instrucao: Instrucao,
+    registro: RegistroDeAuditoria,
+  ): Promise<void> {
+    const lote = writeBatch(this.db)
+    lote.set(
+      doc(this.db, COLECAO, instrucao.id),
+      InstrucaoMapper.toFirestore(instrucao),
+    )
+    lote.set(
+      doc(this.db, COLECAO_DE_AUDITORIA, registro.id),
+      AuditoriaMapper.toFirestore(registro),
+    )
+    await lote.commit()
   }
 
   async buscarPorId(id: string): Promise<Instrucao | null> {

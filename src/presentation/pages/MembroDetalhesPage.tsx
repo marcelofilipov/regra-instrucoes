@@ -7,9 +7,11 @@ import { useAuth } from '@/presentation/hooks/useAuth'
 import { useMembro } from '@/presentation/hooks/useMembros'
 import {
   useAlterarDataInstrucao,
+  useHistoricoDoMembro,
   useInstrucoesDoMembro,
   useRegistrarInstrucao,
 } from '@/presentation/hooks/useInstrucoes'
+import { HistoricoDeAlteracoes } from '@/presentation/components/HistoricoDeAlteracoes'
 import { InstrucaoTable } from '@/presentation/components/InstrucaoTable'
 import { ProgressoGrauBadge } from '@/presentation/components/ProgressoGrauBadge'
 import { RegistrarInstrucaoForm } from '@/presentation/components/RegistrarInstrucaoForm'
@@ -56,6 +58,9 @@ function FichaDoMembro({ membro, instrucoes, membroId }: FichaDoMembroProps) {
   const { usuario } = useAuth()
   const registro = useRegistrarInstrucao(membroId)
   const correcao = useAlterarDataInstrucao(membroId)
+  // Fora do gate de carregamento da página: a trilha é apêndice, não pode
+  // segurar a ficha inteira nem derrubá-la se falhar.
+  const historico = useHistoricoDoMembro(membroId)
 
   if (usuario === null) return null
 
@@ -114,6 +119,10 @@ function FichaDoMembro({ membro, instrucoes, membroId }: FichaDoMembroProps) {
           </div>
         </section>
       ))}
+
+      {historico.data !== undefined && (
+        <HistoricoDeAlteracoes alteracoes={historico.data} />
+      )}
     </main>
   )
 }
