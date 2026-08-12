@@ -64,7 +64,9 @@ describe('MembroDetalhesPage', () => {
     renderizar(leitor())
 
     expect(await screen.findByText('Marcelo Rodrigo')).toBeInTheDocument()
-    expect(screen.getByText(/Aprendiz — 1 de 7 instruções/)).toBeInTheDocument()
+    expect(
+      screen.getByRole('progressbar', { name: 'Progresso no grau Aprendiz' }),
+    ).toHaveAttribute('aria-valuetext', '1 de 7 instruções')
     expect(screen.getByText('10/03/2026')).toBeInTheDocument()
   })
 

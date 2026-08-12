@@ -6,10 +6,13 @@ import {
   useCadastrarMembro,
   useProgressoDosMembros,
 } from '@/presentation/hooks/useMembros'
+import { calcularResumoDaLoja } from '@/domain/services/progresso'
 import { ExportarDados } from '@/presentation/components/ExportarDados'
+import { MedidorDeProgresso } from '@/presentation/components/MedidorDeProgresso'
 import { MembroForm } from '@/presentation/components/MembroForm'
+import { PainelDeResumo } from '@/presentation/components/PainelDeResumo'
 import { ProgressoGrauBadge } from '@/presentation/components/ProgressoGrauBadge'
-import { ROTULO_DO_PAPEL } from '@/presentation/rotulos'
+import { ROTULO_DO_GRAU, ROTULO_DO_PAPEL } from '@/presentation/rotulos'
 import { mensagemDeErro } from '@/presentation/erros'
 import {
   BOTAO_DESTAQUE,
@@ -75,6 +78,16 @@ export function DashboardPage() {
         </section>
       )}
 
+      {/* Só aparece com obreiro cadastrado: "0 de 0" e "0%" não informam nada
+          e ainda competem com a mensagem que ensina a começar. */}
+      {painel.data !== undefined && painel.data.length > 0 && (
+        <PainelDeResumo
+          resumo={calcularResumoDaLoja(
+            painel.data.map(({ progressoAtual }) => progressoAtual),
+          )}
+        />
+      )}
+
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium text-marinho">Membros</h2>
 
@@ -95,17 +108,21 @@ export function DashboardPage() {
 
         <ul className="flex flex-col gap-2">
           {painel.data?.map(({ membro, progressoAtual }) => (
-            <li
-              key={membro.id}
-              className={`flex flex-wrap items-center justify-between gap-3 ${CARTAO}`}
-            >
-              <Link
-                to={`/membros/${membro.id}`}
-                className={`font-medium ${LINK}`}
-              >
-                {membro.nome}
-              </Link>
-              <ProgressoGrauBadge progresso={progressoAtual} />
+            <li key={membro.id} className={`flex flex-col gap-3 ${CARTAO}`}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <Link
+                  to={`/membros/${membro.id}`}
+                  className={`font-medium ${LINK}`}
+                >
+                  {membro.nome}
+                </Link>
+                <ProgressoGrauBadge progresso={progressoAtual} />
+              </div>
+              <MedidorDeProgresso
+                registradas={progressoAtual.registradas}
+                total={progressoAtual.total}
+                descricao={`Progresso de ${membro.nome} no grau ${ROTULO_DO_GRAU[progressoAtual.grau]}`}
+              />
             </li>
           ))}
         </ul>
