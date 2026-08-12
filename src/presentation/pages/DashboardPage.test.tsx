@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DashboardPage } from './DashboardPage'
 import { renderizarPagina } from '@/test/renderizarPagina'
@@ -34,31 +34,59 @@ async function semearMembro(id: string, nome: string) {
   )
 }
 
+/** Um obreiro com uma instrução do grau Aprendiz — 1 de 7. */
+async function semearObreiroComUmaInstrucao() {
+  await semearMembro('m1', 'Marcelo Rodrigo')
+  await gestao.instrucoes.salvar(
+    Instrucao.registrar({
+      id: 'i1',
+      membroId: 'm1',
+      grau: Grau.APRENDIZ,
+      numero: 1,
+      dataRecebimento: new Date('2026-03-10'),
+      registradoPor: editor().id,
+      registradoEm: new Date('2026-03-10'),
+    }),
+  )
+}
+
 beforeEach(() => {
   gestao = criarGestaoEmMemoria()
 })
 
 describe('DashboardPage', () => {
   it('lista os membros com o progresso do grau atual', async () => {
-    await semearMembro('m1', 'Marcelo Rodrigo')
-    await gestao.instrucoes.salvar(
-      Instrucao.registrar({
-        id: 'i1',
-        membroId: 'm1',
-        grau: Grau.APRENDIZ,
-        numero: 1,
-        dataRecebimento: new Date('2026-03-10'),
-        registradoPor: editor().id,
-        registradoEm: new Date('2026-03-10'),
-      }),
-    )
+    await semearObreiroComUmaInstrucao()
 
     renderizar(leitor())
 
     expect(await screen.findByText('Marcelo Rodrigo')).toBeInTheDocument()
+    expect(screen.getByText('Aprendiz')).toBeInTheDocument()
+
+    const medidor = screen.getByRole('progressbar', {
+      name: 'Progresso de Marcelo Rodrigo no grau Aprendiz',
+    })
+    expect(medidor).toHaveAttribute('aria-valuetext', '1 de 7 instruções')
+  })
+
+  it('resume a Loja acima da lista', async () => {
+    await semearObreiroComUmaInstrucao()
+
+    renderizar(leitor())
+
+    const resumo = await screen.findByRole('region', { name: 'Resumo da Loja' })
+    expect(within(resumo).getByText('Obreiros')).toBeInTheDocument()
+    // 1 instrução registrada de 7 previstas no grau do único obreiro.
+    expect(within(resumo).getByText('14%')).toBeInTheDocument()
+  })
+
+  it('esconde o resumo enquanto não há obreiro', async () => {
+    renderizar(leitor())
+
+    await screen.findByText(/Nenhum membro cadastrado/)
     expect(
-      screen.getByText(/Aprendiz — 1 de 7 instruções/),
-    ).toBeInTheDocument()
+      screen.queryByRole('region', { name: 'Resumo da Loja' }),
+    ).not.toBeInTheDocument()
   })
 
   it('esconde o cadastro de membro do leitor', async () => {

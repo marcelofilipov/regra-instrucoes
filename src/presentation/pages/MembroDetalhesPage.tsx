@@ -13,6 +13,7 @@ import {
 } from '@/presentation/hooks/useInstrucoes'
 import { HistoricoDeAlteracoes } from '@/presentation/components/HistoricoDeAlteracoes'
 import { InstrucaoTable } from '@/presentation/components/InstrucaoTable'
+import { MedidorDeProgresso } from '@/presentation/components/MedidorDeProgresso'
 import { ProgressoGrauBadge } from '@/presentation/components/ProgressoGrauBadge'
 import { RegistrarInstrucaoForm } from '@/presentation/components/RegistrarInstrucaoForm'
 import { ROTULO_DO_GRAU } from '@/presentation/rotulos'
@@ -108,6 +109,11 @@ function FichaDoMembro({ membro, instrucoes, membroId }: FichaDoMembroProps) {
       {progressoPorGrau.map((progresso) => (
         <section key={progresso.grau} className="flex flex-col gap-2">
           <ProgressoGrauBadge progresso={progresso} />
+          <MedidorDeProgresso
+            registradas={progresso.registradas}
+            total={progresso.total}
+            descricao={`Progresso no grau ${ROTULO_DO_GRAU[progresso.grau]}`}
+          />
           <div className={CARTAO}>
             <InstrucaoTable
               grau={progresso.grau}
