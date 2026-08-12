@@ -138,7 +138,7 @@ sem apagar os dados locais.
 - [x] Fase 5 — interface CRUD e painel de progresso
 - [x] Fase 6 — trilha de auditoria gravada no mesmo `writeBatch` da alteração
 - [x] Fase 6.1 — exportação manual dos dados (JSON e CSV) para o Admin
-- [ ] Fase 7 — paleta aplicada, mobile-first, contraste WCAG AA
+- [x] Fase 7 — paleta aplicada, mobile-first, contraste WCAG AA
 - [ ] Fase 8 — projeto Firebase em produção, deploy no Hosting, checklist final
 
 Até aqui o projeto roda **inteiramente em emulador**: ainda não existe projeto

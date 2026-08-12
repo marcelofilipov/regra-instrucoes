@@ -1,5 +1,6 @@
 import { useExportarDados } from '@/presentation/hooks/useExportarDados'
 import { mensagemDeErro } from '@/presentation/erros'
+import { BOTAO_SECUNDARIO, MENSAGEM_DE_ERRO } from '@/presentation/estilos'
 
 /**
  * Backup sob demanda para o Admin. O Spark não tem exportação agendada, então
@@ -21,7 +22,7 @@ export function ExportarDados() {
           type="button"
           disabled={exportacao.isPending}
           onClick={() => exportacao.mutate('json')}
-          className="rounded-md border border-pedra/40 px-3 py-1.5 text-sm text-marinho disabled:opacity-60"
+          className={BOTAO_SECUNDARIO}
         >
           Baixar JSON
         </button>
@@ -29,14 +30,14 @@ export function ExportarDados() {
           type="button"
           disabled={exportacao.isPending}
           onClick={() => exportacao.mutate('csv')}
-          className="rounded-md border border-pedra/40 px-3 py-1.5 text-sm text-marinho disabled:opacity-60"
+          className={BOTAO_SECUNDARIO}
         >
           Baixar CSV
         </button>
       </div>
 
       {exportacao.isError && (
-        <p role="alert" className="text-sm text-red-700">
+        <p role="alert" className={MENSAGEM_DE_ERRO}>
           {mensagemDeErro(exportacao.error)}
         </p>
       )}

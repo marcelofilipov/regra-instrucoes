@@ -18,6 +18,7 @@ import { RegistrarInstrucaoForm } from '@/presentation/components/RegistrarInstr
 import { ROTULO_DO_GRAU } from '@/presentation/rotulos'
 import { formatarData } from '@/presentation/datas'
 import { mensagemDeErro } from '@/presentation/erros'
+import { CARTAO, LINK, MENSAGEM_DE_ERRO, PAGINA } from '@/presentation/estilos'
 
 export function MembroDetalhesPage() {
   const { membroId = '' } = useParams()
@@ -25,13 +26,13 @@ export function MembroDetalhesPage() {
   const instrucoes = useInstrucoesDoMembro(membroId)
 
   if (membro.isPending || instrucoes.isPending) {
-    return <p className="p-6 text-pedra">Carregando…</p>
+    return <p className="p-4 text-pedra sm:p-6">Carregando…</p>
   }
 
   if (membro.isError || instrucoes.isError) {
     return (
-      <main className="flex flex-col gap-3 p-6">
-        <p role="alert" className="text-sm text-red-700">
+      <main className="flex flex-col gap-3 p-4 sm:p-6">
+        <p role="alert" className={MENSAGEM_DE_ERRO}>
           {mensagemDeErro(membro.error ?? instrucoes.error)}
         </p>
         <VoltarAoInicio />
@@ -71,7 +72,7 @@ function FichaDoMembro({ membro, instrucoes, membroId }: FichaDoMembroProps) {
   const progressoAtual = progressoPorGrau[progressoPorGrau.length - 1]
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-6 p-6">
+    <main className={PAGINA}>
       <header className="flex flex-col gap-2">
         <VoltarAoInicio />
         <h1 className="text-2xl font-semibold text-marinho">{membro.nome}</h1>
@@ -99,7 +100,7 @@ function FichaDoMembro({ membro, instrucoes, membroId }: FichaDoMembroProps) {
       )}
 
       {correcao.error !== null && (
-        <p role="alert" className="text-sm text-red-700">
+        <p role="alert" className={MENSAGEM_DE_ERRO}>
           {mensagemDeErro(correcao.error)}
         </p>
       )}
@@ -107,7 +108,7 @@ function FichaDoMembro({ membro, instrucoes, membroId }: FichaDoMembroProps) {
       {progressoPorGrau.map((progresso) => (
         <section key={progresso.grau} className="flex flex-col gap-2">
           <ProgressoGrauBadge progresso={progresso} />
-          <div className="rounded-lg bg-white p-4 shadow-sm">
+          <div className={CARTAO}>
             <InstrucaoTable
               grau={progresso.grau}
               total={progresso.total}
@@ -129,7 +130,7 @@ function FichaDoMembro({ membro, instrucoes, membroId }: FichaDoMembroProps) {
 
 function VoltarAoInicio() {
   return (
-    <Link to="/" className="w-fit text-sm text-marinho underline underline-offset-2">
+    <Link to="/" className={`w-fit text-sm ${LINK}`}>
       ← Voltar aos membros
     </Link>
   )

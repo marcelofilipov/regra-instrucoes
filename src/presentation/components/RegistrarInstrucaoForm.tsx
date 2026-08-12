@@ -5,6 +5,13 @@ import type { Grau } from '@/domain/enums/Grau'
 import type { DadosDoRegistro } from '@/presentation/hooks/useInstrucoes'
 import { ROTULO_DO_GRAU } from '@/presentation/rotulos'
 import { deTextoParaData } from '@/presentation/datas'
+import {
+  BOTAO_PRIMARIO,
+  CAMPO,
+  CARTAO,
+  MENSAGEM_DE_ERRO,
+  ROTULO,
+} from '@/presentation/estilos'
 
 const esquema = z.object({
   numero: z.coerce.number().int().positive(),
@@ -62,17 +69,17 @@ export function RegistrarInstrucaoForm({
   return (
     <form
       onSubmit={handleSubmit(enviar)}
-      className="flex flex-wrap items-end gap-3 rounded-lg bg-white p-4 shadow-sm"
+      className={`flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end ${CARTAO}`}
       aria-label={`Registrar instrução — ${ROTULO_DO_GRAU[grau]}`}
     >
       <div className="flex flex-col gap-1">
-        <label htmlFor="numero" className="text-sm font-medium text-marinho">
+        <label htmlFor="numero" className={ROTULO}>
           Instrução
         </label>
         <select
           id="numero"
           {...register('numero')}
-          className="rounded-md border border-pedra/40 px-3 py-2"
+          className={CAMPO}
         >
           {numerosPendentes.map((numero) => (
             <option key={numero} value={numero}>
@@ -85,7 +92,7 @@ export function RegistrarInstrucaoForm({
       <div className="flex flex-col gap-1">
         <label
           htmlFor="dataRecebimento"
-          className="text-sm font-medium text-marinho"
+          className={ROTULO}
         >
           Data de recebimento
         </label>
@@ -93,10 +100,10 @@ export function RegistrarInstrucaoForm({
           id="dataRecebimento"
           type="date"
           {...register('dataRecebimento')}
-          className="rounded-md border border-pedra/40 px-3 py-2"
+          className={CAMPO}
         />
         {errors.dataRecebimento && (
-          <span role="alert" className="text-sm text-red-700">
+          <span role="alert" className={MENSAGEM_DE_ERRO}>
             {errors.dataRecebimento.message}
           </span>
         )}
@@ -105,13 +112,13 @@ export function RegistrarInstrucaoForm({
       <button
         type="submit"
         disabled={enviando}
-        className="rounded-md bg-marinho px-4 py-2 font-medium text-marfim disabled:opacity-60"
+        className={`w-full sm:w-fit ${BOTAO_PRIMARIO}`}
       >
         Registrar
       </button>
 
       {erro !== null && (
-        <p role="alert" className="w-full text-sm text-red-700">
+        <p role="alert" className={`w-full ${MENSAGEM_DE_ERRO}`}>
           {erro}
         </p>
       )}

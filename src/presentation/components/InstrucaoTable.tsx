@@ -3,6 +3,11 @@ import type { Instrucao } from '@/domain/entities/Instrucao'
 import type { Grau } from '@/domain/enums/Grau'
 import type { DadosDaCorrecao } from '@/presentation/hooks/useInstrucoes'
 import { formatarData, deTextoParaData, paraTextoDeInput } from '@/presentation/datas'
+import {
+  BOTAO_DISCRETO,
+  BOTAO_PRIMARIO,
+  CAMPO,
+} from '@/presentation/estilos'
 
 interface InstrucaoTableProps {
   grau: Grau
@@ -35,61 +40,64 @@ export function InstrucaoTable({
     setIdEmEdicao(null)
   }
 
+  // A tabela rola dentro do cartão em vez de esticar a página no celular.
   return (
-    <table className="w-full text-left text-sm">
-      <thead className="text-pedra">
-        <tr>
-          <th scope="col" className="py-1 font-medium">
-            Instrução
-          </th>
-          <th scope="col" className="py-1 font-medium">
-            Data
-          </th>
-          {podeCorrigir && <th scope="col" className="py-1 font-medium" />}
-        </tr>
-      </thead>
-      <tbody>
-        {numerosDe(total).map((numero) => {
-          const instrucao = porNumero.get(numero) ?? null
-          const editando = instrucao !== null && idEmEdicao === instrucao.id
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[18rem] text-left text-sm">
+        <thead className="text-pedra">
+          <tr>
+            <th scope="col" className="py-1 font-medium">
+              Instrução
+            </th>
+            <th scope="col" className="py-1 font-medium">
+              Data
+            </th>
+            {podeCorrigir && <th scope="col" className="py-1 font-medium" />}
+          </tr>
+        </thead>
+        <tbody>
+          {numerosDe(total).map((numero) => {
+            const instrucao = porNumero.get(numero) ?? null
+            const editando = instrucao !== null && idEmEdicao === instrucao.id
 
-          return (
-            <tr key={numero} className="border-t border-pedra/20">
-              <th scope="row" className="py-2 font-normal">
-                {numero}ª
-              </th>
-              <td className="py-2">
-                {editando ? (
-                  <FormularioDeCorrecao
-                    dataAtual={instrucao.dataRecebimento}
-                    salvando={corrigindo}
-                    aoConfirmar={(novaData) =>
-                      confirmarCorrecao(instrucao.id, novaData)
-                    }
-                    aoCancelar={() => setIdEmEdicao(null)}
-                  />
-                ) : (
-                  <DataDaInstrucao instrucao={instrucao} />
-                )}
-              </td>
-              {podeCorrigir && (
-                <td className="py-2 text-right">
-                  {instrucao !== null && !editando && (
-                    <button
-                      type="button"
-                      onClick={() => setIdEmEdicao(instrucao.id)}
-                      className="text-marinho underline underline-offset-2"
-                    >
-                      Corrigir
-                    </button>
+            return (
+              <tr key={numero} className="border-t border-pedra/20">
+                <th scope="row" className="py-2 font-normal">
+                  {numero}ª
+                </th>
+                <td className="py-2">
+                  {editando ? (
+                    <FormularioDeCorrecao
+                      dataAtual={instrucao.dataRecebimento}
+                      salvando={corrigindo}
+                      aoConfirmar={(novaData) =>
+                        confirmarCorrecao(instrucao.id, novaData)
+                      }
+                      aoCancelar={() => setIdEmEdicao(null)}
+                    />
+                  ) : (
+                    <DataDaInstrucao instrucao={instrucao} />
                   )}
                 </td>
-              )}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
+                {podeCorrigir && (
+                  <td className="py-2 text-right">
+                    {instrucao !== null && !editando && (
+                      <button
+                        type="button"
+                        onClick={() => setIdEmEdicao(instrucao.id)}
+                        className={BOTAO_DISCRETO}
+                      >
+                        Corrigir
+                      </button>
+                    )}
+                  </td>
+                )}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
@@ -137,16 +145,16 @@ function FormularioDeCorrecao({
         type="date"
         value={texto}
         onChange={(evento) => setTexto(evento.target.value)}
-        className="rounded-md border border-pedra/40 px-2 py-1"
+        className={CAMPO}
       />
       <button
         type="submit"
         disabled={salvando}
-        className="rounded-md bg-marinho px-2 py-1 text-marfim disabled:opacity-60"
+        className={BOTAO_PRIMARIO}
       >
         Salvar
       </button>
-      <button type="button" onClick={aoCancelar} className="text-pedra">
+      <button type="button" onClick={aoCancelar} className={BOTAO_DISCRETO}>
         Cancelar
       </button>
     </form>
